@@ -13,6 +13,7 @@
 ## webpack
 
 JavaScript 모듈화 도구.
+브라우저에서 파일 단위 모듈 시스템을 사용하기 쉽지않아, 모듈을 IIFE 스타일로 변경해주는 과정 뿐만 아니라 하나의 파일로 묶어 네트워크 비용을 최소화할 수 있는 방법이 웹 프론트엔드 개발 과정에 필요하다.
 
 ### 모듈 정의와 모듈 사용
 
@@ -53,24 +54,53 @@ alert(require('./greeting'));
 ```
 
 모듈을 정의하고 사용하도록 로딩하는 방법은 어렵지 않다.
+
 다만 모듈로 만든 파일은 바로 웹 페이지에 넣어 브라우저에서 실행할 수 없다.
 webpack을 통해 컴파일해 브라우저에서 실행할 수 있는 형태로 바꿔야한다.
 
-### webpack 사용 방법
+### entry
 
-webpack은 Node.js가 설치된 환경에서 실행된다.
-Node.js를 사용하는 환경에서 webpack을 설치하고 모듈을 컴파일하는 방법은 다음과 같다.
+webpack 의존성의 시작점.
 
-#### 설치와 컴파일
+webpack은 entry를 통해서 필요한 모듈을 로딩하고 하나의 파일로 묶는다.
 
-webpack은 다음과 같은 명령어로 설치할 수 있다.
-
+```javascript
+module.exports = {
+  entry: {
+    main: './src/app.js'
+  }
+}
 ```
-npm install webpack -g
+
+### output
+
+entry에 설정한 자바스크립트 파일을 시작으로 의존되어 있는 모든 모듈을 하나로 묶는다.
+번들된 결과물의 위치는 output에 기록한다.
+
+```javascript
+module.export = {
+  entry: {
+    main: './src/app.js'
+  },
+  output: {
+    filename: 'bundle.js',
+    path: './dist'
+  }
+}
 ```
 
-webpack이 설치되면 다음과 같이 webpack [엔트리 파일 경로] [번들 파일 경로] 형식으로 명령어를 실행해 모듈을 컴파일한다.
+html파일에서 번들된 파일을 로딩하게 작성해준다.
 
+```html
+<body>
+  <script src="./dist/bundle.js"></script>
+</body>
 ```
-webpack ./entry.js bundle.js
-```
+
+### loader
+
+webpack은 모든 파일을 모듈로 관리한다. 자바스크립트 뿐만아니라 이미지, 폰트, 스타일시트도 모두 모듈로 관리한다. 그러나 webpack은 자바스크립트 밖에 모른다. 자바스크립트가 아닌 파일을 webpack이 이해할 수 있게 변환을 해줘야하는데 로더가 이러한 역할을 한다.
+
+## 참고자료
+1. https://d2.naver.com/helloworld/0239818
+2. http://blog.jeonghwan.net/js/2017/05/15/webpack.html
